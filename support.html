@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>고객지원 – 자세AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #141414;
+      --border: #222;
+      --accent: #c8f135;
+      --accent-dim: rgba(200, 241, 53, 0.08);
+      --text: #f0f0f0;
+      --muted: #666;
+      --card: #181818;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      background: rgba(13,13,13,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+
+    .nav-name {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      padding: 160px 40px 80px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(200, 241, 53, 0.2);
+      border-radius: 100px;
+      padding: 4px 14px;
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      color: var(--accent);
+      letter-spacing: 0.5px;
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .hero p {
+      font-size: 17px;
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 520px;
+      line-height: 1.7;
+    }
+
+    /* CONTACT CARD */
+    .contact-section {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 40px 60px;
+    }
+
+    .contact-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .contact-card-top {
+      padding: 40px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .contact-info h2 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.4px;
+    }
+
+    .contact-info p {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .email-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-dim);
+      border: 1px solid rgba(200,241,53,0.25);
+      border-radius: 12px;
+      padding: 14px 20px;
+      text-decoration: none;
+      color: var(--accent);
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .email-chip:hover {
+      background: rgba(200,241,53,0.14);
+      border-color: rgba(200,241,53,0.45);
+    }
+
+    .response-row {
+      padding: 20px 40px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .response-dot {
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* FAQ */
+    .faq-section {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 28px;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 22px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      color: var(--text);
+      font-family: 'Noto Sans KR', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      transition: background 0.15s;
+    }
+
+    .faq-question:hover { background: rgba(255,255,255,0.02); }
+
+    .faq-icon {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+      color: var(--muted);
+      transition: transform 0.25s, border-color 0.25s, color 0.25s;
+    }
+
+    .faq-item.open .faq-icon {
+      transform: rotate(45deg);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .faq-answer-inner {
+      padding: 0 28px 22px;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.75;
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    footer p {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 120px 20px 60px; }
+      .contact-section, .faq-section { padding-left: 20px; padding-right: 20px; }
+      .contact-card-top { flex-direction: column; }
+      .response-row { padding: 16px 20px; }
+      footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-brand">
+    <div class="nav-logo">💪</div>
+    <span class="nav-name">자세AI</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#faq">자주 묻는 질문</a></li>
+    <li><a href="#contact">문의하기</a></li>
+    <li><a href="https://demodev112.github.io/jaseai-legal/privacy.html">개인정보처리방침</a></li>
+    <li><a href="https://demodev112.github.io/jaseai-legal/terms.html">이용약관</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">고객 지원</div>
+  <h1>무엇을<br>도와드릴까요<span>?</span></h1>
+  <p>자세AI 사용 중 궁금한 점이나 불편한 사항이 있으시면 언제든지 문의해 주세요.</p>
+</section>
+
+<section class="contact-section" id="contact">
+  <div class="contact-card">
+    <div class="contact-card-top">
+      <div class="contact-info">
+        <h2>이메일 문의</h2>
+        <p>서비스 이용 중 문제가 발생하거나<br>궁금한 점이 있으시면 이메일로 연락해 주세요.</p>
+      </div>
+      <a href="mailto:RO@rapidoverload.com" class="email-chip">
+        ✉ RO@rapidoverload.com
+      </a>
+    </div>
+    <div class="response-row">
+      <div class="response-dot"></div>
+      영업일 기준 1–2일 내 답변 드립니다
+    </div>
+  </div>
+</section>
+
+<section class="faq-section" id="faq">
+  <p class="section-label">FAQ</p>
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        어떤 운동 종목을 분석할 수 있나요?
+        <div class="faq-icon">+</div>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          스쿼트, 데드리프트, 벤치프레스, 오버헤드프레스, 런지, 플랭크 등 종목 제한 없이 모든 웨이트 및 맨몸 운동을 지원합니다. 운동 종목을 별도로 선택하지 않아도 AI가 영상을 보고 스스로 판단합니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        제 운동 영상은 어떻게 처리되나요?
+        <div class="faq-icon">+</div>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          업로드된 운동 영상은 AI 자세 분석 목적으로만 사용되며, 분석 완료 후 서버에서 즉시 삭제됩니다. 영상이 저장되거나 다른 목적으로 활용되지 않습니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        구독을 해지하려면 어떻게 하나요?
+        <div class="faq-icon">+</div>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          구독 해지는 각 앱 스토어에서 직접 처리할 수 있습니다.<br><br>
+          • <strong>App Store:</strong> 설정 → Apple ID → 구독 → 자세AI → 구독 취소<br>
+          • <strong>Google Play:</strong> Play 스토어 → 프로필 → 결제 및 구독 → 구독 → 자세AI → 취소<br><br>
+          갱신일 24시간 전까지 해지하면 다음 결제가 발생하지 않습니다.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        환불을 받을 수 있나요?
+        <div class="faq-icon">+</div>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          환불은 결제가 이루어진 스토어 정책에 따라 처리됩니다.<br><br>
+          • <strong>App Store 환불:</strong> reportaproblem.apple.com에서 신청<br>
+          • <strong>Google Play 환불:</strong> play.google.com/store/account에서 신청<br><br>
+          스토어를 통한 해결이 어려운 경우 RO@rapidoverload.com으로 문의해 주세요.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        분석 결과가 의료적 진단인가요?
+        <div class="faq-icon">+</div>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          아닙니다. 자세AI의 분석 결과는 참고용 정보이며, 의료적 진단이나 전문 트레이닝 지도를 대체하지 않습니다. 부상이 있거나 건강에 이상이 있는 경우 반드시 전문가와 상담하세요.
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggle(this)">
+        회원 탈퇴는 어떻게 하나요?
+        <div class="faq-icon">+</div>
+      </button>
+      <div class="faq-answer">
+        <div class="faq-answer-inner">
+          앱 내 설정 화면에서 회원 탈퇴를 신청할 수 있습니다. 탈퇴 즉시 처리되며, 개인정보처리방침에 따라 데이터가 처리됩니다.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 급진적과부하 주식회사 · 자세AI</p>
+  <div class="footer-links">
+    <a href="https://demodev112.github.io/jaseai-legal/privacy.html">개인정보처리방침</a>
+    <a href="https://demodev112.github.io/jaseai-legal/terms.html">이용약관</a>
+    <a href="mailto:RO@rapidoverload.com">문의</a>
+  </div>
+</footer>
+
+<script>
+  function toggle(btn) {
+    const item = btn.closest('.faq-item');
+    const answer = item.querySelector('.faq-answer');
+    const isOpen = item.classList.contains('open');
+
+    document.querySelectorAll('.faq-item.open').forEach(el => {
+      el.classList.remove('open');
+      el.querySelector('.faq-answer').style.maxHeight = null;
+    });
+
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  }
+</script>
+
+</body>
+</html>
